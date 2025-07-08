@@ -1,0 +1,17 @@
+{
+  "hash": "b9066be6c9777e9f1ca5df69567359f0",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"analysis\"\n---\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(babynames)\nlibrary(knitr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(tidyr)\nlibrary(pheatmap)\n```\n:::\n\n\nNow we will examine the babynames dataset.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nhead(babynames) |> kable()\n```\n\n::: {.cell-output-display}\n\n\n| year|sex |name      |    n|      prop|\n|----:|:---|:---------|----:|---------:|\n| 1880|F   |Mary      | 7065| 0.0723836|\n| 1880|F   |Anna      | 2604| 0.0266790|\n| 1880|F   |Emma      | 2003| 0.0205215|\n| 1880|F   |Elizabeth | 1939| 0.0198658|\n| 1880|F   |Minnie    | 1746| 0.0178884|\n| 1880|F   |Margaret  | 1578| 0.0161672|\n\n\n:::\n:::\n\n\nTo create a visualization of the most popular baby names, we have created two functions. Click the 'Code' link to view:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nget_most_frequent <- function(babynames, select_sex, from = 1950) {\n  most_freq <- babynames |>\n    filter(sex == select_sex, year > from) |>\n    group_by(name) |>\n    summarise(average = mean(prop)) |>\n    arrange(desc(average))\n    \n  return(list(\n    babynames = babynames,\n    most_frequent = most_freq,\n    sex = select_sex,\n    from = from))\n}\n\nplot_top <- function(x, top = 10) {\n  topx <- x$most_frequent$name[1:top]\n  \n  p <- x$babynames |>\n    filter(name %in% topx, sex == x$sex, year > x$from) |>\n    ggplot(aes(x = year, y = prop, color = name)) +\n    geom_line() +\n    scale_color_brewer(palette = \"Paired\") +\n    theme_classic()\n  \n  return(p)\n}\n```\n:::\n\n\n```         \nHere we call the code to visualize the top 10 most frequent girl names from 1950 onwards:\n```\n\n\n::: {.cell}\n\n```{.r .cell-code}\nget_most_frequent(babynames, select_sex = \"F\") |>\n  plot_top()\n```\n\n::: {.cell-output-display}\n![Line plot displaying proportion of top 10 girl names by year](test_website_files/figure-html/fig-line-girls-1.png){#fig-line-girls width=672}\n:::\n:::\n\n\n```         \nIn @fig-line-girls you can see that there has been a peak in popularity for 'Lisa', 'Jennifer' and 'Jessica'. Interesting! Let's have a look at the boys names:\n```\n\n\n::: {.cell}\n\n```{.r .cell-code}\nget_most_frequent(babynames, select_sex = \"M\") |>\n  plot_top()\n```\n\n::: {.cell-output-display}\n![Line plot displaying proportion of top 10 boy names by year](test_website_files/figure-html/fig-line-boys-1.png){#fig-line-boys width=672}\n:::\n:::\n\n",
+    "supporting": [
+      "test_website_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
