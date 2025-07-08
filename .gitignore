@@ -5,3 +5,5 @@
 _site
 _extensions
 styles.css
+
+/.quarto/
