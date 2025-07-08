@@ -11,6 +11,7 @@ website:
       - about.qmd
       - test_website.qmd
       - test_website_inteructive.qmd
+      - figure_panel.qmd
 
 engine: knitr
 format:
